@@ -20,3 +20,32 @@
 
 
 - Login, database, cancellation, booking history
+
+
+
+# # Entities 
+
+"""
+  Category:
+    - id        (e.g. "gold")
+    - name      (e.g. "Gold")
+    - price     (e.g. 400)
+
+  Row:
+    - row       (e.g. "A")
+    - category  (id of a Category)
+    - seats     (list of seat numbers; null = aisle)
+
+  Layout:
+    - rows      (list of Row)
+
+  Seat:
+    - id        (row + number, e.g. "A5")
+    - row       (e.g. "A")
+    - number    (e.g. 5)
+    - category  (taken from its row)
+
+  STATE (what changes while the app runs)
+    - selectedSeats: seat ids the user has picked
+    - bookedSeats:   seat ids already reserved
+    """

@@ -25,7 +25,7 @@
 
 # # Entities 
 
-"""
+```
   Category:
     - id        (e.g. "gold")
     - name      (e.g. "Gold")
@@ -48,4 +48,4 @@
   STATE (what changes while the app runs)
     - selectedSeats: seat ids the user has picked
     - bookedSeats:   seat ids already reserved
-    """
+```

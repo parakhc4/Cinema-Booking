@@ -1,3 +1,6 @@
+Q: Build a Cinema Hall Seat Booking app. Show a seating layout with seat positions, aisles, and multiple seat categories (Classic, Prime, XL, Gold), each with its own price. Users can select and deselect multiple seats across categories and confirm a booking. After confirmation, the layout shows reserved and available seats. The design should scale to different cinema layouts and large seating plans.
+
+
 # # FUNCTIONAL
 
 

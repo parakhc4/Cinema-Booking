@@ -4,8 +4,24 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
-function App() {
+function Seat({number, color,disabled,onClick}){
+  return (
+    <button style={{ width: 30, height: 30, backgroundColor: color}} disabled={disabled} onClick={onClick}>
+      {number}
+    </button>
+  );
+}
 
+function Summary({selectedSeats,totalPrice}) {
+  return(
+    <div>
+    <p>Selected Seats : {selectedSeats.join(" ")}</p>
+    <p>Total Price : {totalPrice}</p>
+
+    </div>
+  );
+}
+function App() {
   const categories = {
     classic: { name: "Classic", price: 150 },
     prime: { name: "Prime", price: 200 },
@@ -21,25 +37,27 @@ function App() {
   ];
 
   const handleSeatClick = (seatID) => {
-    // setSelectededSeats([...selectedSeats,seatID]);
+
     if (selectedSeats.includes(seatID)){
       setSelectededSeats(selectedSeats.filter((id)=>id!=seatID));
     }
     else{
-      setSelectededSeats([...selectedSeats,seatID]);
+      if ((selectedSeats.length)>=6){
+        alert("Maximum 6 seats per person permitted");
+      }
+      else{
+        setSelectededSeats([...selectedSeats,seatID]);
+      }
     }
   };
 
   const getSeatPrice = (seatID) => {
     // find row number of the seat
     const thisRow = seatID[0];
-    console.log(thisRow);
+
 
     // find category of row number
     const thisCategory = categories[layout.find(row=> row.row == thisRow).category];
-    console.log(thisCategory);
-
-
     return thisCategory.price;
 
   };
@@ -50,6 +68,32 @@ function App() {
       total += getSeatPrice(selectedSeats[i]);
     }
     return total;
+  }
+
+  const isBookedSeat = (seatID) => {
+    if (bookedSeats.includes(seatID)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  const getSeatColor = (seatID) => {
+    if (bookedSeats.includes(seatID)){
+      return "gray";
+    }
+    else if (selectedSeats.includes(seatID)){
+      return "green";
+    }
+    else{
+      return "black";
+    }
+  }
+
+  const processBooking = ()=>{
+    setBookedSeats([...bookedSeats,...selectedSeats]);
+    setSelectededSeats([]);
   }
 
   const [selectedSeats,setSelectededSeats] = useState([]);
@@ -65,21 +109,30 @@ function App() {
           <p>
             {r.row} - {categories[r.category].name} ₹{categories[r.category].price}
           </p>
-          {getSeatPrice("B4")}
+
           <div style={{display:"flex", gap:6, justifyContent: "center"}}>
             {r.seats.map((s)=>(
               s==null?
               <div style={{width:30}}></div>
               :
-              <button onClick={()=>handleSeatClick(r.row+s)} key={r.row + s} style={{ width: 30, height: 30, backgroundColor:selectedSeats.includes(r.row+s)?"green":"black" }}>{s}</button>
+              <Seat
+              key={r.row+s}
+              number={s}
+              color={getSeatColor(r.row+s)}
+              disabled={bookedSeats.includes(r.row+s)}
+              onClick={()=>handleSeatClick(r.row+s)}/>
             ))}
           </div>
         </div>
       ))}
     </ul>
 
-    <p>Selected Seats : {selectedSeats.join(" ")}</p>
-    <p>Total Price : {cartPrice(selectedSeats)}</p>
+    <Summary
+      selectedSeats = {selectedSeats}
+      totalPrice = {cartPrice(selectedSeats)}
+
+    ></Summary>
+    <button disabled = {selectedSeats.length==0} onClick={processBooking} style={{ width: 100, height: 50}}>Book Seats</button>
     </div>
   )
 }
